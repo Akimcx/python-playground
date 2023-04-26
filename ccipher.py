@@ -1,14 +1,29 @@
 import argparse
 
+LEN_ENGLISH_ALPHABET = 26
+
 def encrypt(args):
-    for k,v in args:
-        print(f"${k} => {v}")
+    crypto(args.text, args.key,-LEN_ENGLISH_ALPHABET)
 
 def decrypt(args):
-    print(args)
+    crypto(args.text,-args.key,LEN_ENGLISH_ALPHABET)
+
+def crypto(text,key,alphabet_len):
+    result = ""
+    for c in text:
+        if (c.isspace()):
+            result += c
+            continue
+        next_c = ord(c) + key
+        if(next_c not in range(ord('a'),ord('z')+1) and next_c not in range(ord('A'),ord('Z')+1)):
+            next_c += alphabet_len
+        result += chr(next_c)
+    print(result)
+
+
 
 def main():
-    parser = argparse.ArgumentParser(prog='ccipher',description='Encrypt / Decrypt TEXT')
+    parser = argparse.ArgumentParser(prog='ccipher',description='Encrypt / Decrypt TEXT using the Ceasar Cipher')
     subparsers = parser.add_subparsers(required=True)
     parser.add_argument('text',metavar='TEXT')
 
@@ -30,25 +45,6 @@ def main():
 
 if (__name__ == "__main__"):
     main()
-    exit(0)
-
-    print(sys.argv)
-    args_count = len(sys.argv)
-    if(args_count < 2):
-        usage()
-        exit(0)
-    
-    commands = sys.argv[1]
-    text = sys.argv[2]
-
-    if(commands == "encrypt"):
-        print( encrypt(text) )
-    elif(commands == "decrypt"):
-        print( decrypt(text) )
-    else:
-        print(f"ERR: Unknown sub_commands `{commands}`")
-        usage()
-        exit(1)
 
 
 
